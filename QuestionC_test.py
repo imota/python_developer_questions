@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-import pytest
-from QuestionC import LRUCache
-from QuestionC import Item
-
+from datetime import timedelta, datetime
+from QuestionC import LRUCache, Item
 import unittest
+import time
 
 class TestStringMethods(unittest.TestCase):
 
@@ -63,6 +62,12 @@ class TestStringMethods(unittest.TestCase):
         cache.put(2, 3)
         cache.delete(1)
         self.assertEqual(cache.get_cache_count(), 1)
+
+    def test_LRUCache_10(self):
+        cache = LRUCache(capacity = 1, expiration_time = timedelta(milliseconds=1))
+        cache.put(1, 5)
+        time.sleep(0.1)
+        self.assertEqual(cache.get(1), None)
 
 if __name__ == '__main__':
     unittest.main()

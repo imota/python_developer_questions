@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 from collections import OrderedDict
 
 '''
 TODO:
-1 - Time expiration
-2 - Resilient to network failures or crashes.
-3 - Near real time replication of data across Geolocation. Writes need to be in real time.
-4 - Data consistency across regions
-5 - Locality of reference, data should almost always be available from the closest region
-6 - Flexible Schema
+1 - Resilient to network failures or crashes.
+2 - Near real time replication of data across Geolocation. Writes need to be in real time.
+3 - Data consistency across regions
+4 - Locality of reference, data should almost always be available from the closest region
 '''
 class LRUCache:
     def __init__(self, capacity, expiration_time = timedelta.max):
@@ -19,8 +16,8 @@ class LRUCache:
         self.capacity = capacity
         self.expiration_time = expiration_time
 
-    def has_expired(self, key):
-        return False
+    def has_expired(self, item):
+        return self.expiration_time < datetime.now() - item.last_update
 
     def get_free_capacity(self):
         return self.capacity - len(self.cache)
@@ -33,7 +30,7 @@ class LRUCache:
 
     def get(self, key):
         item = self.cache.pop(key, None)
-        if item == None or self.expiration_time < datetime.now() - item.last_update:
+        if item == None or self.has_expired(item):
             return None
 
         if item != None:
