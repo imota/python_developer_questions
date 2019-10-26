@@ -58,8 +58,3 @@ class Item:
     def __init__(self, value = None):
         self.value = value
         self.last_update = datetime.now()
-
-    def update(self, value):
-        self.value = value
-        self.last_update = datetime.now()
-        return self
