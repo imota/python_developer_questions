@@ -85,7 +85,7 @@ def test_LRUCache_5():
     cache.put(2, 3)
     assert cache.get_cache_count() == 1
 
-def test_LRUCache_2():
+def test_LRUCache_6():
     cache = LRUCache(cache_capacity = 1)
     cache.put(1, 5)
     cache.put(2, 3)
