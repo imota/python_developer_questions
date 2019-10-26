@@ -44,7 +44,7 @@ class LRUCache:
         if key in self.cache:
             self.cache.pop(key, None)
         elif not self.has_free_space():
-            del self.cache[list(self.cache.keys())[-1]]
+            self.cache.popitem()
         self.cache[key] = Item(value = value)   
 
     def has_free_space(self):
