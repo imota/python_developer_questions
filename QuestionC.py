@@ -16,17 +16,20 @@ class LRUCache():
         self.cache_count = 0
         self.cache_capacity = cache_capacity
 
-    def _free_cache(self):
-        removed_item = self.cached_list.pop()
-        if removed_item != None:
-            self.cached_dictionary.pop(removed_item.key, None)
-            self.cache_count -= 1
+    def hasExpired(self, key):
+        return False
 
     def get_free_capacity(self):
         return self.cache_capacity - self.cache_count
 
     def get_cache_count(self):
         return self.cache_count
+
+    def delete(self, key):
+        item = self.cached_dictionary.pop(key, None)
+        if item != None:
+            item.remove()    
+            self.cache_count -= 1
 
     def get(self, key):
         if not key in self.cached_dictionary:
@@ -41,11 +44,20 @@ class LRUCache():
             item.value = value
             self.cached_list.move_to_start(item)
         else:
-            if self.cache_count == self.cache_capacity:
+            if not self.has_free_space():
                 self._free_cache()
             new_item = self.cached_list.add_item(key, value)
             self.cached_dictionary[key] = new_item
             self.cache_count += 1
+
+    def has_free_space(self):
+        return self.cache_count < self.cache_capacity
+
+    def _free_cache(self):
+        removed_item = self.cached_list.pop()
+        if removed_item != None:
+            self.cached_dictionary.pop(removed_item.key, None)
+            self.cache_count -= 1    
 
 class DoubleLinkedList():
     def __init__(self):

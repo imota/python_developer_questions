@@ -90,3 +90,24 @@ def test_LRUCache_6():
     cache.put(1, 5)
     cache.put(2, 3)
     assert cache.get(2) == 3
+
+def test_LRUCache_7():
+    cache = LRUCache(cache_capacity = 1)
+    cache.put(1, 5)
+    cache.put(2, 3)
+    cache.delete(2)
+    assert cache.cache_count == 0
+
+def test_LRUCache_8():
+    cache = LRUCache(cache_capacity = 1)
+    cache.put(1, 5)
+    cache.put(2, 3)
+    cache.delete(2)
+    assert cache.get(2) == None
+
+def test_LRUCache_9():
+    cache = LRUCache(cache_capacity = 1)
+    cache.put(1, 5)
+    cache.put(2, 3)
+    cache.delete(1)
+    assert cache.cache_count == 1
