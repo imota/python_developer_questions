@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+from datetime import datetime
+from datetime import timedelta
+from collections import OrderedDict
+
 '''
 TODO:
 1 - Time expiration
@@ -9,98 +13,53 @@ TODO:
 5 - Locality of reference, data should almost always be available from the closest region
 6 - Flexible Schema
 '''
-class LRUCache():
-    def __init__(self, cache_capacity):
-        self.cached_dictionary = {}
-        self.cached_list = DoubleLinkedList()
-        self.cache_count = 0
-        self.cache_capacity = cache_capacity
+class LRUCache:
+    def __init__(self, capacity, expiration_time = timedelta.max):
+        self.cache = OrderedDict()
+        self.capacity = capacity
+        self.expiration_time = expiration_time
 
-    def hasExpired(self, key):
+    def has_expired(self, key):
         return False
 
     def get_free_capacity(self):
-        return self.cache_capacity - self.cache_count
+        return self.capacity - len(self.cache)
 
     def get_cache_count(self):
-        return self.cache_count
+        return len(self.cache)
 
     def delete(self, key):
-        item = self.cached_dictionary.pop(key, None)
-        if item != None:
-            item.remove()    
-            self.cache_count -= 1
+        self.cache.pop(key, None)
 
     def get(self, key):
-        if not key in self.cached_dictionary:
+        item = self.cache.pop(key, None)
+        if item == None or self.expiration_time < datetime.now() - item.last_update:
             return None
-        item = self.cached_dictionary[key]
-        self.cached_list.move_to_start(item)
+
+        if item != None:
+            self.cache[key] = item
         return item.value
 
     def put(self, key, value):
-        if key in self.cached_dictionary:
-            item = self.cached_dictionary[key]
-            item.value = value
-            self.cached_list.move_to_start(item)
-        else:
-            if not self.has_free_space():
-                self._free_cache()
-            new_item = self.cached_list.add_item(key, value)
-            self.cached_dictionary[key] = new_item
-            self.cache_count += 1
+        if key in self.cache:
+            self.cache.pop(key, None)
+        elif not self.has_free_space():
+            del self.cache[list(self.cache.keys())[-1]]
+        self.cache[key] = Item(value = value)   
 
     def has_free_space(self):
-        return self.cache_count < self.cache_capacity
+        return len(self.cache) < self.capacity
 
-    def _free_cache(self):
-        removed_item = self.cached_list.pop()
-        if removed_item != None:
-            self.cached_dictionary.pop(removed_item.key, None)
-            self.cache_count -= 1    
+    def move_to_start(self, item):
+        self.delete(item.key)
+        self.cache[item.key] = item
 
-class DoubleLinkedList():
-    def __init__(self):
-        self.start = DoubleLinkedNode()
-        self.end = DoubleLinkedNode(prev = self.start)
-        self.start.next = self.end
-        self.count = 0
-
-    def move_to_start(self, node): #error trying to remove start or end
-        self.remove(node)
-        node.remove()
-        self._add_node(node)
-    
-    def remove(self, node):
-        node.remove()
-        self.count -= 1
-
-    def add_item(self, key, item):
-        new_node = DoubleLinkedNode(key = key, value = item)
-        self._add_node(new_node)
-        return new_node
-
-    def _add_node(self, node):
-        node.prev = self.start
-        node.next = self.start.next
-        self.start.next.prev = node
-        self.start.next = node
-        self.count += 1
-
-    def pop(self):
-        item = self.end.prev
-        if item != self.start:
-            self.remove(item)
-            return item
-        return None
-
-class DoubleLinkedNode():
-    def __init__(self, key = None, value = None, prev = None, next = None):
-        self.key = key #we store the key to make deletion from the dictionary based on the node faster
+class Item:
+    def __init__(self, value = None):
         self.value = value
-        self.prev = prev
-        self.next = next
+        self.last_update = datetime.now()
 
-    def remove(self):
-        self.prev.next = self.next
-        self.next.prev = self.prev
+    def update(self, value):
+        self.value = value
+        self.last_update = datetime.now()
+        return self
