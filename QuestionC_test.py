@@ -16,7 +16,9 @@ class TestQuestionC(unittest.TestCase):
         cache = LRUCache(capacity = 1)
         cache.put(1, 5)
         cache.put(2, 3)
-        self.assertEqual(cache.get(1), None)
+        with self.assertRaises(TypeError) as context:
+            cache.get(1)
+        self.assertTrue('' in str(context.exception))
 
     def test_LRUCache_put_2_capacity_1_find_second(self):
         cache = LRUCache(capacity = 1)
@@ -48,7 +50,9 @@ class TestQuestionC(unittest.TestCase):
         cache.put(1, 5)
         cache.put(2, 3)
         cache.delete(2)
-        self.assertEqual(cache.get(2), None)
+        with self.assertRaises(TypeError) as context:
+            cache.get(2)
+        self.assertTrue('' in str(context.exception))
 
     def test_LRUCache_delete_already_removed_element(self):
         cache = LRUCache(capacity = 1)
@@ -61,7 +65,9 @@ class TestQuestionC(unittest.TestCase):
         cache = LRUCache(capacity = 1, expiration_time = timedelta(milliseconds=1))
         cache.put(1, 5)
         time.sleep(0.1)
-        self.assertEqual(cache.get(1), None)
+        with self.assertRaises(TypeError) as context:
+            cache.get(1)
+        self.assertTrue('' in str(context.exception))
 
 if __name__ == '__main__':
     unittest.main()

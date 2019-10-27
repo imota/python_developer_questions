@@ -24,7 +24,7 @@ class LRUCache:
     def get(self, key):
         item = self.cache.pop(key, None)
         if item == None or self.has_expired(item):
-            return None
+            raise TypeError
 
         if item != None:
             self.cache[key] = item

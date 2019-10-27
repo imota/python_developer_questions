@@ -55,7 +55,7 @@ class TestQuestionA(unittest.TestCase):
         self.assertFalse(does_overlap((1,5.1),(5.1,6)))
 
     def test_should_overlap_segment1_starts_to_the_left_segment1_ends_at_segment2_double_numbers(self):
-        self.assertFalse(does_overlap((1,5.1),(5.0,6)))
+        self.assertTrue(does_overlap((1,5.1),(5.0,6)))
 
 if __name__ == '__main__':
     unittest.main()
