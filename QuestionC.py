@@ -3,13 +3,6 @@
 from datetime import datetime, timedelta
 from collections import OrderedDict
 
-'''
-TODO:
-1 - Resilient to network failures or crashes.
-2 - Near real time replication of data across Geolocation. Writes need to be in real time.
-3 - Data consistency across regions
-4 - Locality of reference, data should almost always be available from the closest region
-'''
 class LRUCache:
     def __init__(self, capacity, expiration_time = timedelta.max):
         self.cache = OrderedDict()

@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 
-def compare_strings(str1, str2):
+
+def compare_version_strings(str1, str2):
+    """
+    Returns 1 if str1 > str2
+            0 if str1 == str2
+            -1 if str1 < str2
+    """
     str1 = [int(x) for x in str1.replace(' ','').split('.')]
     str2 = [int(x) for x in str2.replace(' ','').split('.')]
 

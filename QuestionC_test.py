@@ -5,7 +5,7 @@ from QuestionC import LRUCache, Item
 import time
 import unittest
 
-class TestStringMethods(unittest.TestCase):
+class TestQuestionC(unittest.TestCase):
 
     def test_LRUCache_put_1(self):
         cache = LRUCache(capacity = 1)
