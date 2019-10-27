@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def doesOverlap(x1, x2, x3, x4):
+def does_overlap(x1, x2, x3, x4):
     (x1, x2) = (x1, x2) if x1 < x2 else (x2, x1)
     (x3, x4) = (x3, x4) if x3 < x4 else (x4, x3)
     if x3 > x1 and x3 < x2:

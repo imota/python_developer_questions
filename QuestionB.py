@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def compareStrings(str1, str2):
+def compare_strings(str1, str2):
     str1 = [int(x) for x in str1.replace(' ','').split('.')]
     str2 = [int(x) for x in str2.replace(' ','').split('.')]
 

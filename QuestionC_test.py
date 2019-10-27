@@ -2,8 +2,8 @@
 
 from datetime import timedelta, datetime
 from QuestionC import LRUCache, Item
-import unittest
 import time
+import unittest
 
 class TestStringMethods(unittest.TestCase):
 
